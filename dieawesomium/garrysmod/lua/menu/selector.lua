@@ -39,7 +39,7 @@ controls.newgame:SetFont("menufont")
 controls.newgame.Paint = function(pnl, w,h) end
 controls.newgame.UpdateColours = butt_updatecolors
 controls.newgame.DoClick = function(pnl)
-	RawConsoleCommand("menu_play")
+	RunConsoleCommand("menu_play")
 	surface.PlaySound("garrysmod/ui_click.wav")
 end
 
@@ -54,7 +54,7 @@ controls.findgame:SetFont("menufont")
 controls.findgame.Paint = function() end
 controls.findgame.UpdateColours = butt_updatecolors
 controls.findgame.DoClick = function(pnl)
-	RawConsoleCommand("gamemenucommand openserverbrowser")
+	RunConsoleCommand("gamemenucommand openserverbrowser")
 	surface.PlaySound("garrysmod/ui_click.wav")
 end
 
@@ -69,7 +69,7 @@ controls.options:SetFont("menufont")
 controls.options.Paint = function() end
 controls.options.UpdateColours = butt_updatecolors
 controls.options.DoClick = function(pnl)
-	RawConsoleCommand("gamemenucommand openoptionsdialog")
+	RunConsoleCommand("gamemenucommand openoptionsdialog")
 	surface.PlaySound("garrysmod/ui_click.wav")
 end
 
@@ -83,7 +83,7 @@ controls.achievement.Paint = function() end
 controls.achievement.UpdateColours = butt_updatecolors
 
 controls.achievement.DoClick = function(pnl)
-	RawConsoleCommand("menu_achievements")
+	RunConsoleCommand("menu_achievements")
 	surface.PlaySound("garrysmod/ui_click.wav")
 end
 
@@ -97,7 +97,7 @@ controls.addons:SetFont("menufont")
 controls.addons.Paint = function() end
 controls.addons.UpdateColours = butt_updatecolors
 controls.addons.DoClick = function(pnl)
-	RawConsoleCommand("menu_extensions")
+	RunConsoleCommand("menu_extensions")
 	surface.PlaySound("garrysmod/ui_click.wav")
 end
 
@@ -125,7 +125,7 @@ controls.quit:SetFont("menufont")
 controls.quit.Paint = function() end
 controls.quit.UpdateColours = butt_updatecolors
 controls.quit.DoClick = function(pnl)
-	RawConsoleCommand("exit")
+	RunConsoleCommand("exit")
 	surface.PlaySound("garrysmod/ui_click.wav")
 end
 
@@ -138,7 +138,7 @@ hook.Add("DrawOverlay", "QuitThink", function()
 			is_quit = false
 			controls.quit:SetText("Disconnect")
 			controls.quit.DoClick = function(pnl)
-				RawConsoleCommand("disconnect")
+				RunConsoleCommand("disconnect")
 				surface.PlaySound("garrysmod/ui_click.wav")
 			end
 		end
@@ -147,7 +147,7 @@ hook.Add("DrawOverlay", "QuitThink", function()
 			is_quit = true
 			controls.quit:SetText("Quit")
 			controls.quit.DoClick = function(pnl)
-				RawConsoleCommand("exit")
+				RunConsoleCommand("exit")
 				surface.PlaySound("garrysmod/ui_click.wav")
 			end
 		end

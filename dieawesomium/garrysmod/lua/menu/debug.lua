@@ -3,7 +3,6 @@ concommand.Add("lua_find_mn", function(p,c,a,s) for k,v in pairs(_G) do if(strin
 
 timer.Simple(1, function()
 
-	RawConsoleCommand("con_enable 1")
-	RawConsoleCommand("showconsole")
+	RunConsoleCommand("showconsole")
 
 end)

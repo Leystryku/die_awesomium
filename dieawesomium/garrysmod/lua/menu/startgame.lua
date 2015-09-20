@@ -81,17 +81,17 @@ function PANEL:LaunchGame( bMultiplayer )
 	// This hook is used to close all of the GAMEUI windows.
 	hook.Call( "StartGame", {} )
 	
-	RawConsoleCommand( "progress_enable" )
+	RunConsoleCommand( "progress_enable" )
 	
 	if ( !bMultiplayer ) then
 	
-		RawConsoleCommand( "disconnect" )
-		RawConsoleCommand( "maxplayers", 1 )
+		RunConsoleCommand( "disconnect" )
+		RunConsoleCommand( "maxplayers", 1 )
 		
 	else
 	
-		RawConsoleCommand( "disconnect" )
-		RawConsoleCommand( "sv_cheats", "0" )
+		RunConsoleCommand( "disconnect" )
+		RunConsoleCommand( "sv_cheats", "0" )
 		
 		RunConsoleCommand( "maxplayers", GetConVarNumber( "maxplayers" ) )
 		

@@ -1,13 +1,13 @@
 
 //enable multicore rendering
-RawConsoleCommand("cl_threaded_bone_setup 1")
-RawConsoleCommand("cl_threaded_client_leaf_system 1")
-RawConsoleCommand("r_threaded_client_shadow_manager 1")
-RawConsoleCommand("r_threaded_particles 1")
-RawConsoleCommand("r_threaded_renderables 1")
-RawConsoleCommand("r_queued_ropes 1")
-RawConsoleCommand("studio_queue_mode 1")
-RawConsoleCommand("gmod_mcore_test 1")
+RunConsoleCommand("cl_threaded_bone_setup", "1")
+RunConsoleCommand("cl_threaded_client_leaf_system", "1")
+RunConsoleCommand("r_threaded_client_shadow_manager", "1")
+RunConsoleCommand("r_threaded_particles", "1")
+RunConsoleCommand("r_threaded_renderables", "1")
+RunConsoleCommand("r_queued_ropes", "1")
+RunConsoleCommand("studio_queue_mode", "1")
+RunConsoleCommand("gmod_mcore_test", "1")
 
 
 
