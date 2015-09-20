@@ -125,7 +125,7 @@ controls.quit:SetFont("menufont")
 controls.quit.Paint = function() end
 controls.quit.UpdateColours = butt_updatecolors
 controls.quit.DoClick = function(pnl)
-	RunConsoleCommand("exit")
+	RunConsoleCommand("gamemenucommand", "quit")
 	surface.PlaySound("garrysmod/ui_click.wav")
 end
 
