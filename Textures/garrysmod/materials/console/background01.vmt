@@ -1,0 +1,7 @@
+"UnlitGeneric"
+{
+	"$basetexture" "console/background01"
+	"$additive" "1"
+	"$nocull" "1"
+}
+
