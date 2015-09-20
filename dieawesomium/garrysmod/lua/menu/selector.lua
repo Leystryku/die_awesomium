@@ -54,7 +54,7 @@ controls.findgame:SetFont("menufont")
 controls.findgame.Paint = function() end
 controls.findgame.UpdateColours = butt_updatecolors
 controls.findgame.DoClick = function(pnl)
-	RunConsoleCommand("gamemenucommand openserverbrowser")
+	RunConsoleCommand("gamemenucommand", "openserverbrowser")
 	surface.PlaySound("garrysmod/ui_click.wav")
 end
 
@@ -69,7 +69,7 @@ controls.options:SetFont("menufont")
 controls.options.Paint = function() end
 controls.options.UpdateColours = butt_updatecolors
 controls.options.DoClick = function(pnl)
-	RunConsoleCommand("gamemenucommand openoptionsdialog")
+	RunConsoleCommand("gamemenucommand", "openoptionsdialog")
 	surface.PlaySound("garrysmod/ui_click.wav")
 end
 
