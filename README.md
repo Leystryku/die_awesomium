@@ -18,6 +18,9 @@ and then reinstall this.
 
 If you're updating, make sure you delete the old files and verify the games integrity before doing so!
 
+Screenshot:
+http://i.imgur.com/C3O2Yjp.jpg
+
 Credits:
 Killing/Replacing Awesomium - Leystryku
 New Lua Menu based on gmod 10 menu  ( mainly port of gmod 10 menu ) - Leystryku
