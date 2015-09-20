@@ -1,7 +1,0 @@
-"UnlitGeneric"
-{
-	"$basetexture" "console/background01_widescreen"
-	"$additive" "1"
-	"$nocull" "1"
-}
-
