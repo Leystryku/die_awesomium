@@ -147,7 +147,7 @@ hook.Add("DrawOverlay", "QuitThink", function()
 			is_quit = true
 			controls.quit:SetText("Quit")
 			controls.quit.DoClick = function(pnl)
-				RunConsoleCommand("exit")
+				RunConsoleCommand("gamemenucommand", "quit")
 				surface.PlaySound("garrysmod/ui_click.wav")
 			end
 		end
