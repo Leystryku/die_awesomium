@@ -21,6 +21,9 @@ If you're updating, make sure you delete the old files and verify the games inte
 Screenshot:
 http://i.imgur.com/C3O2Yjp.jpg
 
+install + showcase ( crash@options is from playing around with sprays aka - not related to this ):
+https://www.copy.com/s/t%3Ax7IN31vbQiIs%3Bp%3A%252F2015-09-20_02-39-15.mp4%3Boid%3A165
+
 Credits:
 Killing/Replacing Awesomium - Leystryku
 New Lua Menu based on gmod 10 menu  ( mainly port of gmod 10 menu ) - Leystryku
