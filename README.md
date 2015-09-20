@@ -14,7 +14,7 @@ It should replace Awesomium.dll and some other stuff.
 If not, check that you installed it to the right directory.
 
 Incase it doesn't work out of the box ( crash with a MessageBox on startup ), try installing https://www.microsoft.com/en-us/download/details.aspx?id=48145 ( 32 bit aka x86 one ),
-and then reinstall this.
+and then reinstall this package.
 
 If you're updating, make sure you delete the old files and verify the games integrity before doing so!
 
