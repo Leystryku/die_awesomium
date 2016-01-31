@@ -1,9 +1,9 @@
 //=============================================================================//
 //  ___  ___   _   _   _    __   _   ___ ___ __ __
 // |_ _|| __| / \ | \_/ |  / _| / \ | o \ o \\ V /
-//  | | | _| | o || \_/ | ( |_n| o ||   /   / \ / 
+//  | | | _| | o || \_/ | ( |_n| o ||   /   / \ /
 //  |_| |___||_n_||_| |_|  \__/|_n_||_|\\_|\\ |_|  2010
-//										 
+//
 //=============================================================================//
 
 PANEL.Base = "Panel"
@@ -19,7 +19,7 @@ local AddonsToAdd	= {}
 function PANEL:Init()
 
 	self:DockMargin( 4, 4, 4, 4 )
-	
+
 	self.Scroller = vgui.Create( "DScrollPanel", self )
 		self.Scroller:Dock( FILL )
 		self.Scroller:DockMargin( 0, 0, 0, 4 )
@@ -27,46 +27,19 @@ function PANEL:Init()
 
 	self.Grid = vgui.Create( "DGrid", self.Scroller )
 	self.Grid:Dock( TOP )
-	
+
 	self.InfoPanel = vgui.CreateFromTable( pnlInfo, self );
 	self.InfoPanel:Dock( BOTTOM )
-	
-	AddonsToAdd = {}
-	
-	local workshopaddons = engine.GetAddons()
-	for k,v in pairs(workshopaddons) do
-		local tbl = {}
-		tbl.name = "[W] " .. v.title
-		tbl.info = "workshop addon"
-		tbl.up_date = ""
-		tbl.version = "1"
-		tbl.author_name = ""
-		tbl.author_email = ""
-		tbl.author_url = "http://steamcommunity.com/sharedfiles/filedetails/?id=" .. v.wsid
-		AddonsToAdd[tbl.name] = tbl
-	end
-	
-	
-	local _, legacy = file.Find("addons/*", "MOD")
-	
-	for k,addonfolder in pairs(legacy) do
-		
-		local addontxt = file.Read("addons/" .. addonfolder .. "/addon.txt", "MOD")
-		
-		if(not addontxt) then continue end
-		local tbl = util.KeyValuesToTable(addontxt)
-		
-		AddonsToAdd[addonfolder] = tbl
-	end
-	
+
 	self.Grid:SetCols( self:GetWide() / 100 )
 	self.Grid:SetColWide( 103 )
 	self.Grid:SetRowHeight( 63 )
-	
+
 	self:Dock( FILL )
-	
+
 	self.Scroller:AddItem( self.Grid )
-	
+
+	self:ReloadAddons()
 end
 
 function PANEL:PerformLayout()
@@ -75,33 +48,63 @@ function PANEL:PerformLayout()
 
 end
 
-function PANEL:AddQueuedAddons()
+local finished = true
+function PANEL:ReloadAddons()
 
-	if ( table.Count( AddonsToAdd ) == 0 ) then return end
-	
+	finished = false
+	for k, v in next, self.Grid.Items do
+		v:Remove()
+		self.Grid.Items[k] = nil
+	end
+	AddonsToAdd = {}
+
+	local workshopaddons = engine.GetAddons()
+	for k,v in pairs(workshopaddons) do
+		local tbl = {}
+		tbl.name = v.title
+		tbl.info = "Workshop addon"
+		tbl.up_date = ""
+		tbl.version = "1"
+		tbl.author_name = ""
+		tbl.author_email = ""
+		tbl.author_url = "http://steamcommunity.com/sharedfiles/filedetails/?id=" .. v.wsid
+		tbl.wsid = v.wsid
+		tbl.mounted = v.mounted
+		AddonsToAdd[tbl.name] = tbl
+	end
+
+
+	local _, legacy = file.Find("addons/*", "MOD")
+
+	for k,addonfolder in pairs(legacy) do
+
+		local addontxt = file.Read("addons/" .. addonfolder .. "/addon.txt", "MOD")
+
+		if(not addontxt) then continue end
+		local tbl = util.KeyValuesToTable(addontxt)
+
+		AddonsToAdd[addonfolder] = tbl
+	end
+
+
 	for k, v in SortedPairs( AddonsToAdd ) do
-	
+
 		local row = vgui.CreateFromTable( pnlRow, self.Grid )
 		self.Grid:AddItem( row )
 		row:Setup( k, v, self.InfoPanel );
-	
-		AddonsToAdd[ k ] = nil
-	
+
 		self.Scroller:InvalidateLayout()
-		
-		// Select the first entry
-		if ( k == 1 ) then
-			row:DoClick()
-		end
-		
-		return
-		
+
 	end
-	
+	finished = true
 end
 
 function PANEL:Think()
-
-	self:AddQueuedAddons()
-
+	local wsAddons = {}
+	for k, v in next, AddonsToAdd do
+		if v.wsid then wsAddons[v.wsid] = true end
+	end
+	if table.Count(wsAddons) ~= table.Count(engine.GetAddons()) and finished then
+		self:ReloadAddons()
+	end
 end
