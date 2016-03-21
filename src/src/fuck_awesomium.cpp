@@ -1,7 +1,6 @@
 #pragma once
 
 #include "fuck_awesomium.h"
-
 #define DllExport   __declspec( dllexport )
 
 
@@ -16,30 +15,39 @@ namespace Awesomium
 	class DllExport JSArray
 	{
 	public:
-		JSArray() { };
+		explicit JSArray() { };
 		JSArray(unsigned int n) {  };
 		JSArray(const JSArray &rhs) { };
-		JSArray& operator==(const JSArray&rhs) {
+		JSArray & operator=(const JSArray&rhs) {
 			return *shitarray;
 		};
 
 		unsigned int size() const { return 1; };
 		unsigned int capacity() const { return 1; };
-		JSValue & At(unsigned int idx);
-		const JSValue & At(unsigned int idx) const;
-		JSValue & operator==(unsigned int idx);
-		const JSValue & operator==(unsigned int idx) const;
+		JSValue & At(unsigned int idx) { return *shitvalue; };
+		const JSValue & At(unsigned int idx) const { return *shitvalue; };
+
+		JSValue & operator[](unsigned int idx) {
+			return *shitvalue;
+		};
+
+		const JSValue & operator[](unsigned int idx) const {
+			return *shitvalue;
+		}
+
 		void Push(const JSValue&item) {};
 		void Pop() {};
 		void Insert(const JSValue&item, unsigned int idx) {};
 		void Erase(unsigned int idx) {};
-		void Clear(const JSValue&item) {};
+		void Clear() {};
 
 		static JSArray *shitarray;
+		static JSValue *shitvalue;
+
+	protected:
+		WebVector<JSValue>* vector_;
 	};
 };
-
-Awesomium::JSArray*Awesomium::JSArray::shitarray = new Awesomium::JSArray;
 
 namespace Awesomium {
 	class DllExport WebKeyboardEvent
@@ -113,7 +121,7 @@ namespace Awesomium {
 		WebString& Assign(const unsigned short* data) { return *shitstring; };
 		WebString& Assign(const unsigned short* data, unsigned int len) { return *shitstring; };
 		WebString& Append(const WebString& src) { return *shitstring; };
-		void Swap(WebString& src) { src= *shitstring; };
+		void Swap(WebString& src) { src = *shitstring; };
 
 		void Clear() { instance_ = shitstring; };
 
@@ -131,21 +139,66 @@ namespace Awesomium {
 		void*instance_;
 		friend class InternalHelper;
 	};
+
+	class DllExport WebStringArray {
+	public:
+		WebStringArray() {};
+		explicit WebStringArray(unsigned int n) {};
+		WebStringArray(const WebStringArray& rhs) {};
+		~WebStringArray() {};
+
+		WebStringArray& operator=(const WebStringArray& rhs) { return *shitarray; };
+
+		unsigned int size() const { return 0; };
+		WebString& At(unsigned int idx) { return *shitstring; };
+		const WebString& At(unsigned int idx) const { return *shitstring; };
+		WebString& operator[](unsigned int idx) { return *shitstring; };
+		const WebString& operator[](unsigned int idx) const { return *shitstring; };
+		void Push(const WebString& item) {};
+
+		static WebString*shitstring;
+		static WebStringArray*shitarray;
+
+	protected:
+		WebVector<WebString>* vector_;
+	};
 }
 
 Awesomium::WebString*Awesomium::WebString::shitstring = new Awesomium::WebString;
+Awesomium::WebString*Awesomium::WebStringArray::shitstring = new Awesomium::WebString;
+Awesomium::WebStringArray*Awesomium::WebStringArray::shitarray = new Awesomium::WebStringArray;
 
 
 #pragma pack(push)
 #pragma pack(1)
 namespace Awesomium
 {
+	class WebStringArray;
+
+	enum LogLevel {
+		kLogLevel_None = 0,  ///< No log is created
+		kLogLevel_Normal,    ///< Logs only errors
+		kLogLevel_Verbose,   ///< Logs everything
+	};
+
 	struct DllExport WebConfig
 	{
 	public:
 		WebConfig() {};
-		~WebConfig() {};
 
+		LogLevel log_level;
+		WebString package_path;
+		WebString plugin_path;
+		WebString log_path;
+		WebString child_process_path;
+		WebString user_agent;
+		int remote_debugging_port;
+		WebString remote_debugging_host;
+		bool reduce_memory_usage_on_navigation;
+		WebString user_script;
+		WebString user_stylesheet;
+		WebString asset_protocol;
+		WebStringArray additional_options;
 	};
 }
 
@@ -153,6 +206,7 @@ namespace Awesomium {
 	struct DllExport WebPreferences
 	{
 		WebPreferences() {};
+		int max_http_cache_storage;
 		bool enable_javascript;
 		bool enable_dart;
 		bool enable_plugins;
@@ -166,6 +220,7 @@ namespace Awesomium {
 		bool enable_smooth_scrolling;
 		bool enable_gpu_acceleration;
 		WebString user_stylesheet;
+		WebString user_script;
 		WebString proxy_config;
 		WebString accept_language;
 		WebString accept_charset;
@@ -187,13 +242,15 @@ namespace Awesomium {
 namespace Awesomium
 {
 	class WebSession;
+	class ResourceRequest;
 
 	class DllExport DataSource
 	{
 	public:
 		virtual ~DataSource() {};
-		virtual void OnRequest(int id, const WebString&path) {};
-		void SendResponse(int id, unsigned int buf, unsigned char*buff, const WebString&meme) {};
+		virtual void OnRequest(int id, const ResourceRequest& request, const WebString& path) {};
+		void SendResponse(int id, unsigned int buf, unsigned char*buff, const WebString& meme) {};
+		void SendResponse(int id, unsigned int buf, unsigned char const * buff, class Awesomium::WebString const &meme) {};
 
 	protected:
 		DataSource() {};
@@ -204,32 +261,123 @@ namespace Awesomium
 	};
 }
 
+namespace Awesomium {
+	class DllExport ResourceResponse {
+	public:
+		ResourceResponse() {};
+		static ResourceResponse* Create(unsigned int num_bytes, unsigned char* buffer, const WebString& mime_type) { return shitresponse; };
+		static ResourceResponse* Create(const WebString& file_path) { return shitresponse; };
+		static ResourceResponse* shitresponse;
+	protected:
+		ResourceResponse(unsigned int num_bytes, unsigned char* buffer, const WebString& mime_type) {};
+		ResourceResponse(const WebString& file_path) {};
+		~ResourceResponse() {};
+		unsigned int num_bytes_;
+		unsigned char* buffer_;
+		WebString mime_type_;
+		WebString file_path_;
+		friend class WebCoreImpl;
+	};
+}
+
+Awesomium::ResourceResponse *Awesomium::ResourceResponse::shitresponse = new Awesomium::ResourceResponse;
 
 Awesomium::WebString shiteh;
 char*dick = "ay";
+
+namespace Awesomium {
+	class DllExport UploadElement {
+	public:
+		virtual bool IsFilePath() const { return false; };
+		virtual bool IsBytes() { return false; };
+		virtual unsigned int num_bytes() { return 1; };
+		virtual const unsigned char* bytes() { return 0; };
+		virtual WebString file_path() { return shiteh; };
+	protected:
+		virtual ~UploadElement() {}
+	};
+}
+
+
+
 
 namespace Awesomium {
 	class DllExport WebURL
 	{
 	public:
 		WebURL() {};
-		WebURL(const WebString&url_string) {};
-		~WebURL() {};
-
+		explicit WebURL(const WebString&url_string) {};
 		WebURL(const WebURL&rhs) {};
 
-		char*& operator==(const WebURL&rhs) { return dick; };
+		~WebURL() {};
 
-		bool IsValid() { return true; };
-		bool IsEmpty() { return false; };
-		WebString spec() { return shiteh; };
-		WebString scheme() { return shiteh; };
-		WebString username() { return shiteh; };
-		WebString password() { return shiteh; };
+		WebURL& operator=(const WebURL&rhs) { return *shiturl; };
 
+		bool IsValid() const { return true; };
+		bool IsEmpty() const { return false; };
+		WebString spec() const { return shiteh; };
+		WebString scheme() const { return shiteh; };
+		WebString username() const { return shiteh; };
+		WebString password() const { return shiteh; };
+		WebString host() const { return shiteh; };
+		WebString port() const { return shiteh; };
+		WebString path() const { return shiteh; };
+		WebString query() const { return shiteh; };
+		WebString anchor() const { return shiteh; };
+		WebString filename() const { return shiteh; };
+
+		bool operator==(const WebURL& other) const { return false; };
+		bool operator!=(const WebURL& other) const { return false; };
+		bool operator<(const WebURL& other) const { return false; };
+
+		static WebURL *shiturl;
+
+	private:
+		explicit WebURL(const void* internal_instance);
+		void* instance_;
+		friend class InternalHelper;
 	};
 }
 
+Awesomium::WebURL *Awesomium::WebURL::shiturl = new Awesomium::WebURL;
+
+
+namespace Awesomium {
+	class WebURL;
+	class WebString;
+	class UploadElement;
+
+	class DllExport ResourceRequest {
+	public:
+		virtual void Cancel() {};
+		virtual int origin_process_id() { return 1; };
+		virtual int origin_routing_id() { return 1; };
+		virtual WebURL url() { return *oururl; };
+		virtual WebString method() { return *ourstring; };
+		virtual void set_method(const WebString& method) {};
+		virtual WebString referrer() const { return *ourstring; };
+		virtual void set_referrer(const WebString& referrer) {};
+		virtual WebString extra_headers() const { return *ourstring; };
+		virtual void set_extra_headers(const WebString& headers) {};
+		virtual void AppendExtraHeader(const WebString& name, const WebString& value) {};
+		virtual unsigned int num_upload_elements() const { return 0; };
+		virtual const UploadElement* GetUploadElement(unsigned int idx) const { return ourupload; };
+		virtual void ClearUploadElements() {};
+		virtual void AppendUploadFilePath(const WebString& path) {};
+		virtual void AppendUploadBytes(const char* bytes, unsigned int num_bytes) {};
+		virtual void set_ignore_data_source_handler(bool ignore) {};
+
+		static WebURL *oururl;
+		static WebString *ourstring;
+		static UploadElement *ourupload;
+	protected:
+		virtual ~ResourceRequest() {}
+	};
+}
+
+Awesomium::WebURL *Awesomium::ResourceRequest::oururl = new WebURL;
+Awesomium::WebString *Awesomium::ResourceRequest::ourstring = new WebString;
+Awesomium::UploadElement *Awesomium::ResourceRequest::ourupload = new UploadElement;
 
 Awesomium::WebString cocka;
 Awesomium::WebPreferences shitpref;
@@ -243,11 +391,11 @@ namespace Awesomium {
 		virtual WebString data_path() const { return cocka; };
 		virtual const WebPreferences& preferences() const { return shitpref; };
 		virtual void AddDataSource(const WebString& asset_host, DataSource* source) {};
-		virtual void SetCookie(const WebURL& url, const WebString& cookie_string,  bool is_http_only, bool force_session_cookie) {};
+		virtual void SetCookie(const WebURL& url, const WebString& cookie_string, bool is_http_only, bool force_session_cookie) {};
 		virtual void ClearCookies() {};
 		virtual void ClearCache() {};
-		virtual int GetZoomForURL(const WebURL& url) { return 1; };
-		protected:
+		virtual int GetZoomForURL(const WebURL& url) { return 0; };
+	protected:
 		virtual ~WebSession() {}
 	};
 }
@@ -263,32 +411,17 @@ NativeWindow shit2;
 
 
 namespace Awesomium {
-	class DllExport JSObject
-	{
-	public:
-		JSObject() {};
-		JSObject(const JSObject &obj) {};
-		JSObject &operator==(const JSObject&rhs) {  return *fuckyou; };
-		unsigned int remote_id() const { return 0; };
-		unsigned int ref_count() const { return 0; };
+	class WebView;
+	class JSValue;
+	class JSObject;
 
-		void SetCustomMethod(const WebString& name, bool has_return_value) {};
-		static JSObject*fuckyou;
-	};
-}
-
-
-Awesomium::JSObject*Awesomium::JSObject::fuckyou = new Awesomium::JSObject;
-
-
-namespace Awesomium {
 	class DllExport JSValue
 	{
 	public:
 		JSValue() {};
-		JSValue(bool val) {};
-		JSValue(int val) {};
-		JSValue(double val) {};
+		explicit JSValue(bool val) {};
+		explicit JSValue(int val) {};
+		explicit JSValue(double val) {};
 		JSValue(const WebString& val) {};
 		JSValue(const JSObject& val) {};
 		JSValue(const JSArray &val) {};
@@ -296,7 +429,10 @@ namespace Awesomium {
 
 		~JSValue() {};
 
-		JSValue& operator==(const JSValue&rhs) { return *cocka; };
+		JSValue& operator=(const JSValue&rhs) { return *cocka; };
+
+		static const JSValue& Undefined()  { return *cockb; };
+		static const JSValue& Null() { return *cockc; };
 
 		bool IsBoolean() const { return true; };
 		bool IsInteger() const { return true; };
@@ -308,26 +444,91 @@ namespace Awesomium {
 		bool IsNull() const { return false; };
 		bool IsUndefined() const { return false; };
 
-		WebString ToString() const {return *ding; };
+		WebString ToString() const { return *ding; };
 		int ToInteger() const { return 1; };
 		double ToDouble() const { return 1; };
 		bool ToBoolean() const { return true; };
 		JSArray& ToArray() { return *fotze; };
-		const JSArray& ToArray() const {  return *fotze; };
+		const JSArray& ToArray() const { return *fotze; };
 
 		JSObject& ToObject() { return *penisa; };
-		const JSObject& ToObject() const {return *penisa; };
+		const JSObject& ToObject() const { return *penisa; };
 
 		static JSValue* cocka;
+		static JSValue* cockb;
+		static JSValue* cockc;
 		static JSObject* penisa;
 		static JSArray* fotze;
 		static WebString* ding;
 
 	};
+
+	enum Error {
+		kError_None = 0,
+		kError_BadParameters,
+		kError_ObjectGone,
+		kError_ConnectionGone,
+		kError_TimedOut,
+		kError_WebViewGone,
+		kError_Generic,
+	};
+
+	enum JSObjectType {
+		kJSObjectType_Local,
+		kJSObjectType_Remote,
+		kJSObjectType_RemoteGlobal,
+	};
+
+	class DllExport JSObject
+	{
+	public:
+		JSObject() {};
+		JSObject(const JSObject &obj) {};
+		JSObject &operator=(const JSObject&rhs) { return *shitobj; };
+		unsigned int remote_id() const { return 0; };
+		int ref_count() const { return 0; };
+
+		JSObjectType type() const { return JSObjectType::kJSObjectType_Local; };
+		WebView* owner() const { return shitview; };
+
+		JSArray GetPropertyName() const { return *shitarray; };
+		bool HasProperty(const WebString& name) const { return false; }
+		JSValue GetProperty(const WebString& name) const { return *shitvalue; };
+		void SetProperty(const WebString& name, const JSValue& value) {};
+		void SetPropertyAsync(const WebString& name, const JSValue& value) {};
+		void RemoveProperty(const WebString& name) {};
+		JSArray GetMethodNames() const { return *shitarray; };
+		bool HasMethod(const WebString& name) const { return false; };
+		JSValue Invoke(const WebString& name, const JSArray& args) { return *shitvalue; };
+		void InvokeAsync(const WebString& name, const JSArray& args) {};
+		WebString ToString() const { return *shitstring; };
+
+
+		void SetCustomMethod(const WebString& name, bool has_return_value) {};
+
+		Error last_error() const;
+
+		static JSObject* shitobj;
+		static JSArray* shitarray;
+		static JSValue* shitvalue;
+		static WebString* shitstring;
+		static WebString* shittype;
+		static WebView* shitview;
+	};
 }
 
+Awesomium::JSObject* Awesomium::JSObject::shitobj = new JSObject;
+Awesomium::JSArray* Awesomium::JSObject::shitarray = new JSArray;
+Awesomium::JSValue* Awesomium::JSObject::shitvalue = new JSValue;
+Awesomium::WebString* Awesomium::JSObject::shitstring = new WebString;
+
+
+Awesomium::JSArray*Awesomium::JSArray::shitarray = new Awesomium::JSArray;
+Awesomium::JSValue*Awesomium::JSArray::shitvalue = new Awesomium::JSValue;
 
 Awesomium::JSValue*Awesomium::JSValue::cocka = new Awesomium::JSValue;
+Awesomium::JSValue*Awesomium::JSValue::cockb = new Awesomium::JSValue;
+Awesomium::JSValue*Awesomium::JSValue::cockc = new Awesomium::JSValue;
 Awesomium::JSObject*Awesomium::JSValue::penisa = new Awesomium::JSObject;
 Awesomium::JSArray*Awesomium::JSValue::fotze = new Awesomium::JSArray;
 Awesomium::WebString*Awesomium::JSValue::ding = new Awesomium::WebString;
@@ -356,9 +557,10 @@ namespace Awesomium {
 	{
 	public:
 		virtual void Destroy() { };
-		virtual WebViewType type() {  return 1; };
+		virtual WebViewType type() { return 1; };
 		virtual int process_id() { return 1; };
 		virtual int routing_id() { return 1; };
+		virtual int next_routing_id() { return 1; };
 		virtual ProcessHandle process_handle() { return ourprochandle; };
 		virtual void set_parent_window(NativeWindow parent) { };
 		virtual NativeWindow parent_window() { return shit2; };
@@ -372,7 +574,7 @@ namespace Awesomium {
 		virtual void set_download_listener(void* listener) { downloadlist = listener; };
 		virtual void set_input_method_editor_listener(void* listener) { inputlist = listener; };
 		virtual WebViewListener::View* view_listener() { return &view; };
-		virtual WebViewListener::Load* load_listener() {return &load; };
+		virtual WebViewListener::Load* load_listener() { return &load; };
 		virtual void* process_listener() {
 			return proclist;
 		};
@@ -397,16 +599,16 @@ namespace Awesomium {
 		virtual void GoToHistoryOffset(int offset) { };
 		virtual void Stop() { };
 		virtual void Reload(bool ignore_cache) { };
-		virtual bool CanGoBack() { return 1; };
-		virtual bool CanGoForward() { return 1; };
+		virtual bool CanGoBack() { return true; };
+		virtual bool CanGoForward() { return true; };
 		virtual Surface* surface() {
 			return 0;//oursurface;
 		};
-		virtual WebURL url() {   return *oururl; };
+		virtual WebURL url() { return *oururl; };
 		virtual WebString title() { return *ourstring; };
 		virtual WebSession* session() { return oursession; }
 		virtual bool IsLoading() { return 1; };
-		virtual bool IsCrashed() {return 0; };
+		virtual bool IsCrashed() { return 0; };
 		virtual void Resize(int width, int height) { };
 		virtual void SetTransparent(bool is_transparent) { };
 		virtual bool IsTransparent() { return false; };
@@ -419,7 +621,7 @@ namespace Awesomium {
 		virtual void ZoomOut() { };
 		virtual void SetZoom(int zoom_percent) { };
 		virtual void ResetZoom() { };
-		virtual int GetZoom() {   return 1; };
+		virtual int GetZoom() { return 1; };
 		virtual void InjectMouseMove(int x, int y) { };
 		virtual void InjectMouseDown(int button) { };
 		virtual void InjectMouseUp(int button) { };
@@ -438,15 +640,15 @@ namespace Awesomium {
 		virtual void Paste() { };
 		virtual void PasteAndMatchStyle() { };
 		virtual void SelectAll() { };
-		virtual int PrintToFile(const WebString& output_directory, const int& config) {  return 1; };
+		virtual int PrintToFile(const WebString& output_directory, const int& config) { return 1; };
 		virtual int last_error() const { return 0; };
-		virtual JSValue CreateGlobalJavascriptObject(const WebString& name) { return koks; };
+		virtual JSValue CreateGlobalJavascriptObject(const WebString& name) { return *koks; };
 		virtual void ExecuteJavascript(const WebString& script, const WebString& frame_xpath) { };
-		virtual JSValue ExecuteJavascriptWithResult(const WebString& script, const WebString& frame_xpath) {  return koks; };
+		virtual JSValue ExecuteJavascriptWithResult(const WebString& script, const WebString& frame_xpath) { return *koks; };
 		virtual void set_js_method_handler(void* handler) { jshandler = handler; };
 		virtual void* js_method_handler() { return jshandler; };
 		virtual void set_sync_message_timeout(int timeout_ms) { };
-		virtual int sync_message_timeout() {  return 0; };
+		virtual int sync_message_timeout() { return 0; };
 		virtual void DidSelectPopupMenuItem(int item_index) { };
 		virtual void DidCancelPopupMenu() { };
 		virtual void DidChooseFiles(const void*& files, bool should_write_files) { };
@@ -457,8 +659,10 @@ namespace Awesomium {
 		virtual void DidOverrideCertificateError() { };
 
 		virtual void RequestPageInfo() { };
-		
-		WebView() { }
+
+		virtual void ReduceMemoryUsage() { };
+
+		WebView() {}
 		~WebView() {}
 
 		static WebURL* oururl;
@@ -475,6 +679,7 @@ namespace Awesomium {
 		void*downloadlist;
 		void*inputlist;
 		void*jshandler;
+
 
 	};
 
@@ -497,24 +702,17 @@ namespace Awesomium {
 }
 
 namespace Awesomium {
-	class DllExport ResourceResponse
-	{
-	public:
-	};
-}
-
-namespace Awesomium {
 	class DllExport ResourceInterceptor
 	{
 	public:
-		virtual Awesomium::ResourceResponse* OnRequest( void* request) {
+		virtual Awesomium::ResourceResponse* OnRequest(void* request) {
 			return 0;
 		}
-		virtual bool OnFilterNavigation(int origin_process_id, int origin_routing_id, const Awesomium::WebString& method,  const Awesomium::WebURL& url, bool is_main_frame) {
+		virtual bool OnFilterNavigation(int origin_process_id, int origin_routing_id, const Awesomium::WebString& method, const Awesomium::WebURL& url, bool is_main_frame) {
 			return false;
 		}
-		virtual void OnWillDownload(int origin_process_id,int origin_routing_id, const Awesomium::WebURL& url) {
-		
+		virtual void OnWillDownload(int origin_process_id, int origin_routing_id, const Awesomium::WebURL& url) {
+
 		}
 		virtual ~ResourceInterceptor() {}
 	};
@@ -529,7 +727,7 @@ namespace Awesomium {
 	public:
 		static WebCore*Initialize(const WebConfig&config)  { return instance_; };
 		static void Shutdown() {};
-		static WebCore*instance() {  return instance_; };
+		static WebCore*instance() { return instance_; };
 		virtual WebSession* CreateWebSession(const WebString& path, const WebPreferences& prefs) { return sess; };
 		virtual WebView* CreateWebView(int width, int height, WebSession* session = 0, int type = 0) { return view; };
 		virtual void set_surface_factory(SurfaceFactory* factory) {  };
@@ -537,8 +735,12 @@ namespace Awesomium {
 		virtual void set_resource_interceptor(ResourceInterceptor* interceptor) { };
 		virtual ResourceInterceptor* resource_interceptor() const { return resc; };
 		virtual void Update() {  };
-		virtual void Log(const WebString& message, int severity, const WebString& file,  int line) {  };
+		virtual void Log(const WebString& message, int severity, const WebString& file, int line) {  };
 		virtual const char* version_string() const { return ver; };
+
+		static unsigned int used_memory() { return 0; } // :-) If only it was this easy!
+		static unsigned int allocated() { return 128; } // :-) If only it was this easy!
+		static void release_memory() {};
 
 		virtual ~WebCore() {}
 
@@ -557,40 +759,7 @@ Awesomium::SurfaceFactory*Awesomium::WebCore::surf = new Awesomium::SurfaceFacto
 Awesomium::WebView*Awesomium::WebCore::view = new Awesomium::WebView;
 Awesomium::WebSession*Awesomium::WebCore::sess = new Awesomium::WebSession;
 
-
-namespace Awesomium
-{
-	class DllExport WebStringArray
-	{
-	public:
-		WebStringArray() {};
-		WebStringArray(unsigned int n) {};
-
-
-		void Push(const WebString& item) {};
-	};
-}
-
-Awesomium::JSValue shitvalue;
-Awesomium::JSValue &Awesomium::JSArray::At(unsigned int idx)
-{
-	return shitvalue;
-}
-
-const Awesomium::JSValue &Awesomium::JSArray::At(unsigned int idx) const
-{
-	return shitvalue;
-}
-
-Awesomium::JSValue &Awesomium::JSArray::operator==(unsigned int idx)
-{
-	return shitvalue;
-}
-
-const Awesomium::JSValue &Awesomium::JSArray::operator==(unsigned int idx) const
-{
-	return shitvalue;
-}
+Awesomium::WebView*Awesomium::JSObject::shitview = Awesomium::WebCore::view;
 
 
 char*shitbuf = "COCK";
@@ -602,13 +771,31 @@ namespace Awesomium {
 		BitmapSurface(int width, int height) {};
 		~BitmapSurface() {};
 
-		const unsigned char*buffer() const { return (unsigned char*)shitbuf;  };
+		const unsigned char*buffer() const { return (unsigned char*)shitbuf; };
 		int width() const { return 2; };
 		int height() const { return 2; };
 		int row_span() const { return 2; };
 
 		void set_is_dirty(bool is_dirty) { };
+		bool is_dirty() const { return false; };
+
+		void CopyTo(unsigned char* dst, int dst_row, int dst_depth, bool convert, bool flipy) const {};
+		bool SaveToPNG(const Awesomium::WebString* file_path, bool preserve_transparency = false) { return false; };
+		bool SaveToJPEG(const Awesomium::WebString* file_path, int quality = 90) { return false; };
+		unsigned char GetAlphaAtPoint(int x, int y) const { return 255; };
+		void Paint(unsigned char *src, int src_row_span, const void*& src_rect, const void*& dst_rect) {};
+		void Scroll(int dx, int dy, const void*& clip_rect);
+
+	private:
+		unsigned char* buffer_;
+		int width_;
+		int height_;
+		int row_span_;
+		bool is_dirty_;
 	};
+
+	void DllExport CopyBuffers(int w, int h, unsigned char* src, int r, unsigned char* dst,
+		int dr, int dd, bool rgba, bool flip_y) {};
 }
 
 
