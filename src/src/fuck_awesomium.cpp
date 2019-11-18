@@ -63,14 +63,14 @@ namespace Awesomium {
 
 		class DllExport Load
 		{
-		public:
-			virtual ~Load() {};
+		protected:
+			virtual __thiscall ~Load(void) {};
 		};
 
 		class DllExport View
 		{
-		public:
-			virtual ~View() {};
+		protected:
+			virtual __thiscall ~View(void) {};
 		};
 
 	};
@@ -370,6 +370,8 @@ namespace Awesomium {
 		static WebURL *oururl;
 		static WebString *ourstring;
 		static UploadElement *ourupload;
+		static WebViewListener::View *ourview;
+		static WebViewListener::Load *ourload;
 	protected:
 		virtual ~ResourceRequest() {}
 	};
@@ -378,6 +380,9 @@ namespace Awesomium {
 Awesomium::WebURL *Awesomium::ResourceRequest::oururl = new WebURL;
 Awesomium::WebString *Awesomium::ResourceRequest::ourstring = new WebString;
 Awesomium::UploadElement *Awesomium::ResourceRequest::ourupload = new UploadElement;
+Awesomium::WebViewListener::View *Awesomium::ResourceRequest::ourview = new WebViewListener::View;
+Awesomium::WebViewListener::Load *Awesomium::ResourceRequest::ourload = new WebViewListener::Load;
+
 
 Awesomium::WebString cocka;
 Awesomium::WebPreferences shitpref;
@@ -548,8 +553,6 @@ namespace Awesomium {
 
 }
 
-Awesomium::WebViewListener::View view;
-Awesomium::WebViewListener::Load load;
 namespace Awesomium {
 
 
@@ -573,8 +576,8 @@ namespace Awesomium {
 		virtual void set_print_listener(void* listener) { printlist = listener; };
 		virtual void set_download_listener(void* listener) { downloadlist = listener; };
 		virtual void set_input_method_editor_listener(void* listener) { inputlist = listener; };
-		virtual WebViewListener::View* view_listener() { return &view; };
-		virtual WebViewListener::Load* load_listener() { return &load; };
+		virtual WebViewListener::View* view_listener() { return ResourceRequest::ourview; };
+		virtual WebViewListener::Load* load_listener() { return ResourceRequest::ourload; };
 		virtual void* process_listener() {
 			return proclist;
 		};
@@ -803,13 +806,13 @@ namespace Awesomium {
 
 int FuckAwesomium::Init()
 {
-	std::string init = InitializeSdk();
+	/*std::string init = InitializeSdk();
 
 	if (init != "")
 	{
 		MessageBoxA(NULL, init.c_str(), "!ERROR!", MB_OK);
 		return 0;
-	}
+	}*/
 
 	return 0;
 }
