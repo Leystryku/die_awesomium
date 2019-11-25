@@ -1,4 +1,4 @@
-#include "sdk.h"
+/*#include "sdk.h"
 
 IVEngineClient *g_pEngine = 0;
 ICvar *g_pCVar = 0;
@@ -45,3 +45,4 @@ std::string InitializeSdk()
 	return "";
 
 }
+*/

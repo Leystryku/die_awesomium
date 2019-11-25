@@ -9,7 +9,7 @@
 
 
 #include "stdafx.h"
-#include <cbase.h>
+/*#include <cbase.h>
 #include <inetchannel.h>
 #include <inetmsghandler.h>
 #include <iclient.h>
@@ -21,3 +21,4 @@ extern IVEngineClient *g_pEngine;
 extern ICvar *g_pCVar;
 
 extern std::string(InitializeSdk)();
+*/
