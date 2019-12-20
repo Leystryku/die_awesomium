@@ -29,9 +29,13 @@ https://www.copy.com/s/t%3Ax7IN31vbQiIs%3Bp%3A%252F2015-09-20_02-39-15.mp4%3Boid
 
 
 Credits:
-Killing/Replacing Awesomium - Leystryku
+
+Creating this drop in-awesomium webkit killer - Leystryku
+
 New Lua Menu based on gmod 10 menu  ( mainly port of gmod 10 menu ) - Leystryku
+
 gmod 10 menu - team garry
+
 Loadingscreen - Freezebug
 
 
