@@ -1,5 +1,5 @@
 # die_awesomium
-A dummy dll which replaces awesomium
+A dummy dll which replaces awesomium (the default garrysmod embedded web renderer) and mocks its function calls. In other words, this will give you more FPS because literally nothing will be spent on rendering annoying HTML panels all the time, and it'll be more secure because the game uses a heavily outdated embedded web render making players vulnerable as hell.
 
 
 # Installing
