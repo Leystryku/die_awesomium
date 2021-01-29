@@ -19,6 +19,15 @@ If it crashes with a MessageBox on startup install the VC++ 2015 redists https:/
 If you're updating, make sure you delete the old files and verify the games integrity before doing so!
 
 
+# Compiling
+If you wish to compile this yourself.
+- Head to the src/ directory
+- open premake5.lua in your favourite text editor
+- edit the `sdk_dir` variable to point to the 'src' directory of Valve's Source SDK
+- Save the file and run `premake5 <target>` within that directory; a `projects` folder will then be created.
+
+The only supported platform right now is Windows. Feel free to contribute!
+
 Screenshot:
 ![In program view](http://i.imgur.com/C3O2Yjp.jpg)
 
@@ -32,12 +41,3 @@ Screenshot:
   * Porting the gmod 12 Loadingscreen
 - Team Garry
   * Garrys Mod 10 Menu & Loading Screen
-
-# Compiling
-If you wish to compile this yourself.
-- Head to the src/ directory
-- open premake5.lua in your favourite text editor
-- edit the `sdk_dir` variable to point to the 'src' directory of Valve's Source SDK
-- Save the file and run `premake5 <target>` within that directory; a `projects` folder will then be created.
-
-The only supported platform right now is Windows. Feel free to contribute!
