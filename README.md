@@ -21,7 +21,6 @@ If you wish to compile this yourself.
 
 The only supported platform right now is Windows. Feel free to contribute!
 
-Screenshot:
 ![In program view](https://raw.githubusercontent.com/Leystryku/die_awesomium/master/assets/preview.jpg)
 
 
