@@ -3,19 +3,16 @@ A dummy dll which replaces awesomium (the default garrysmod embedded web rendere
 
 
 # Installing
-- Put everything from the dieawesomium folder into Steam\steamapps\common\GarrysMod or wherever you installed gmod.
+- Put everything from the code_lua folder into Steam\steamapps\common\GarrysMod or wherever you installed gmod.
 - Do the same with everything from the Textures folder.
+
 #### Extra steps
 - You can also do it with dieawesomium_mcorerender for some more speed.
 
 
-If asked to, click yes on every replace.
-It should replace Awesomium.dll and some other stuff.
-If not, check that you installed it to the right directory.
+Make sure it replaces Awesomium.dll and some other stuff. If it does not replace anything, check that you got the right directory.
 
 If it crashes with a MessageBox on startup install the VC++ 2015 redists https://www.microsoft.com/en-us/download/details.aspx?id=48145 ( 32Bit/ x86 )
-
-
 If you're updating, make sure you delete the old files and verify the games integrity before doing so!
 
 

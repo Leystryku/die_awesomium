@@ -1,4 +1,4 @@
-solution "Fuck_Awesomium"
+solution "die_awesomium"
     language "C++"
     location "project"
     targetdir "build/release"
@@ -8,7 +8,13 @@ solution "Fuck_Awesomium"
     buildoptions({"/Qpar", "/Qfast_transcendentals", "/GL", "/Ot", "/Gm", "/MP", "/Gy", "/Gw"})
     linkoptions { "/OPT:REF", "/OPT:ICF", "/LTCG"}
 
-    flags { "Optimize", "NoMinimalRebuild", "NoFramePointer", "EnableSSE2", "FloatFast", "NoBufferSecurityCheck"}
+    flags { "NoMinimalRebuild", "NoBufferSecurityCheck"}
+
+    optimize "on"
+    omitframepointer "on"
+    vectorextensions "SSE2"
+    floatingpoint "fast"
+    symbols "On"
 
     vpaths {
         ["Header Files/*"] = "src/**.h",
@@ -21,26 +27,14 @@ solution "Fuck_Awesomium"
 
     files { "src/**.h", "src/**.cpp" }
 
-    local sdk_dir = "C:/sdk13/mp/src/" -- Change this to suit your setup
-
-    local function sdk(s) return sdk_dir..s end
-
-    includedirs { sdk"public",       sdk"public/tier0", sdk"public/tier1",
-                  sdk"public/tier2", sdk"public/tier3", sdk"public/tier0",
-                  sdk"game",         sdk"game/client",  sdk"game/shared",
-                  sdk"tier1",        sdk"tier0",        sdk"common",
-				  sdk "", }
-
-    libdirs     { sdk"lib", sdk"lib/public" }
-
     -- A project defines one build target
-    project "Fuck_Awesomium"
+    project "die_awesomium"
         configuration "Release"
             defines { "NDEBUG", "_GENERIC" }
             targetname "awesomium"
-            targetdir "../dieawesomium/bin"
+            targetdir "build/release"
 
         configuration "Debug"
             defines { "DEBUG", "_GENERIC" }
-            flags { "Symbols", "EnableSSE2" }
+            targetname "awesomium"
             targetdir "build/debug"
