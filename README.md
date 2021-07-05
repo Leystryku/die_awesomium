@@ -32,5 +32,7 @@ The only supported platform right now is Windows. Feel free to contribute!
 	* Creating this project, porting gm12 menu screen, creating the C++ part
 - Freezebug
   * Porting the gmod 12 Loadingscreen
+- Tenri, Xavier & poliviasg
+  * Contributing with bugfixes and maintenance
 - Team Garry
   * Garrys Mod 10 Menu & Loading Screen
