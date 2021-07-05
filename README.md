@@ -18,7 +18,7 @@ If you're updating, make sure you delete the old files and verify the games inte
 
 # Compiling
 If you wish to compile this yourself.
-- Head to the src/ directoryr
+- Head to the src/ directory
 - Run `premake5 <target>` within that directory; a `projects` folder will then be created.
 
 The only supported platform right now is Windows. Feel free to contribute!
