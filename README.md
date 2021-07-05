@@ -1,5 +1,7 @@
 # die_awesomium
-A dummy dll which replaces awesomium (the default garrysmod embedded web renderer) and mocks its function calls. In other words, this will give you more FPS because literally nothing will be spent on rendering annoying HTML panels all the time, and it'll be more secure because the game uses a heavily outdated embedded web render making players vulnerable as hell.
+A dummy dll which replaces awesomium and mocks its function calls. The dummy binary might work for other applications using Awesomium too.
+
+Was made with Garry's Mod in mind. This was made to give you more FPS while playing Garry's Mod and have less attack surface. No time will be spent on rendering annoying embedded Web-Browser panels. It will also be more secure because the game uses a heavily outdated embedded web render from around 2011 to 2013 making players vulnerable as hell.
 
 
 # Installing
